@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     }
 
     // srand(time(NULL));
+    memset(&report, 0, sizeof(report_t));
     while(1) {
         for (int i = 0; i < THREAD_NUM; i++) {
             ret = pthread_create(&tids[i], NULL, (void *) connection_test, (void *)argv);
@@ -38,15 +39,17 @@ int main(int argc, char *argv[]) {
         }
 
         for (int i = 0; i < THREAD_NUM; i++) {
-            ret = pthread_join(tids[i], (void *)&t_report);
+            ret = pthread_join(tids[i], (void **)&t_report);
             if (ret != 0) {
                 printf("thread joined error: %s\n", strerror(ret));
                 exit(1);
             }
 
-            printf("%d\n", t_report->s_count);
+            report.s_count+=t_report->s_count;
+            report.f_count+=t_report->f_count;
         }
 
+        printf("s: %d, f: %d\n", report.s_count, report.f_count);
         sleep(1);
     }
 
@@ -59,10 +62,11 @@ void *connection_test(char **argv) {
     uint port = (uint)strtol(argv[2], NULL, 10);
     struct sockaddr_in serv_addr;
     time_t timep;
-    report_t report;
+    report_t *report;
 
     memset(&serv_addr, 0, sizeof(serv_addr));
-    memset(&report, 0, sizeof(report));
+    report = malloc(sizeof(report_t));
+    memset(report, 0, sizeof(report_t));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = inet_addr(ip);
     serv_addr.sin_port = htons(port);
@@ -71,7 +75,7 @@ void *connection_test(char **argv) {
         if(sock == -1 ) {
             time(&timep);
             printf("%ssocket error: %s\n\n", ctime(&timep), strerror(errno));
-            report.f_count++;
+            report->f_count++;
             continue;
         }
 
@@ -79,15 +83,15 @@ void *connection_test(char **argv) {
         if(ret == -1) {
             time(&timep);
             printf("%sconnection error: %s\n\n", ctime(&timep), strerror(errno));
-            report.f_count++;
+            report->f_count++;
             continue;
         } else {
-            report.s_count++;
+            report->s_count++;
         }
 
         close(sock);
         usleep(1000);
     }
 
-    pthread_exit((void *)&report);
+    return ((void *)report);
 }
