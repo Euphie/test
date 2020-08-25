@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-#define THREAD_NUM 5 // 线程数
+#define THREAD_NUM 50 // 线程数
 #define THREAD_REQUEST_NUM 100 // 每个线程请求次数
 
 typedef struct report {
@@ -18,7 +18,7 @@ typedef struct report {
 void *connection_test(char **argv);
 
 int main(int argc, char *argv[]) {
-    int ret;
+    int ret, i;
     pthread_t tids[THREAD_NUM];
     report_t report, *t_report;
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     // srand(time(NULL));
     memset(&report, 0, sizeof(report_t));
     while(1) {
-        for (int i = 0; i < THREAD_NUM; i++) {
+        for (i = 0; i < THREAD_NUM; i++) {
             ret = pthread_create(&tids[i], NULL, (void *) connection_test, (void *)argv);
             if (ret != 0) {
                 printf("thread creation error: %s\n", strerror(ret));
@@ -38,7 +38,8 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        for (int i = 0; i < THREAD_NUM; i++) {
+
+        for (i = 0; i < THREAD_NUM; i++) {
             ret = pthread_join(tids[i], (void **)&t_report);
             if (ret != 0) {
                 printf("thread joined error: %s\n", strerror(ret));
@@ -50,14 +51,13 @@ int main(int argc, char *argv[]) {
         }
 
         printf("s: %d, f: %d\n", report.s_count, report.f_count);
-        sleep(1);
     }
 
     return 0;
 }
 
 void *connection_test(char **argv) {
-    int ret, sock;
+    int ret, sock, i;
     char *ip = argv[1];
     uint port = (uint)strtol(argv[2], NULL, 10);
     struct sockaddr_in serv_addr;
@@ -70,11 +70,11 @@ void *connection_test(char **argv) {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = inet_addr(ip);
     serv_addr.sin_port = htons(port);
-    for (int i = 0; i < THREAD_REQUEST_NUM; ++i) {
+    for (i = 0; i < THREAD_REQUEST_NUM; i++) {
         sock = socket(AF_INET, SOCK_STREAM, 0);
         if(sock == -1 ) {
             time(&timep);
-            printf("%ssocket error: %s\n\n", ctime(&timep), strerror(errno));
+            fprintf(stderr, "%ssocket error: %s\n\n", ctime(&timep), strerror(errno));
             report->f_count++;
             continue;
         }
@@ -82,7 +82,7 @@ void *connection_test(char **argv) {
         ret = connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
         if(ret == -1) {
             time(&timep);
-            printf("%sconnection error: %s\n\n", ctime(&timep), strerror(errno));
+            fprintf(stderr, "%sconnection error: %s\n\n", ctime(&timep), strerror(errno));
             report->f_count++;
             continue;
         } else {
