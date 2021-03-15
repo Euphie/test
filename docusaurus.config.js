@@ -1,28 +1,19 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @format
- */
-
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'My Site',
   tagline: 'The tagline of my site',
-  url: 'https://euphie.github.io/test',
+  url: 'https://euphie.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'Euphie', // Usually your GitHub org/user name.
-  projectName: 'euphie.github.io', // Usually your repo name.
+  projectName: 'Euphie', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Facebook Project',
+      title: 'My Site',
       logo: {
-        alt: 'My Facebook Project Logo',
+        alt: 'My Site Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -33,7 +24,6 @@ module.exports = {
           position: 'left',
         },
         {to: 'blog', label: 'Blog', position: 'left'},
-        // Please keep GitHub link to the right for consistency.
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -45,7 +35,7 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Learn',
+          title: 'Docs',
           items: [
             {
               label: 'Style Guide',
@@ -53,7 +43,7 @@ module.exports = {
             },
             {
               label: 'Second Doc',
-              to: 'docs/doc2',
+              to: 'docs/doc2/',
             },
           ],
         },
@@ -65,12 +55,12 @@ module.exports = {
               href: 'https://stackoverflow.com/questions/tagged/docusaurus',
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-            {
               label: 'Discord',
               href: 'https://discordapp.com/invite/docusaurus',
+            },
+            {
+              label: 'Twitter',
+              href: 'https://twitter.com/docusaurus',
             },
           ],
         },
@@ -87,36 +77,8 @@ module.exports = {
             },
           ],
         },
-        {
-          title: 'Legal',
-          // Please do not remove the privacy and terms, it's a legal requirement.
-          items: [
-            {
-              label: 'Privacy',
-              href: 'https://opensource.facebook.com/legal/privacy/',
-            },
-            {
-              label: 'Terms',
-              href: 'https://opensource.facebook.com/legal/terms/',
-            },
-            {
-              label: 'Data Policy',
-              href: 'https://opensource.facebook.com/legal/data-policy/',
-            },
-            {
-              label: 'Cookie Policy',
-              href: 'https://opensource.facebook.com/legal/cookie-policy/',
-            },
-          ],
-        },
       ],
-      logo: {
-        alt: 'Facebook Open Source Logo',
-        src: 'img/oss_logo.png',
-        href: 'https://opensource.facebook.com',
-      },
-      // Please do not remove the credits, help to publicize Docusaurus :)
-      copyright: `Copyright © ${new Date().getFullYear()} Facebook, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
   },
   presets: [
